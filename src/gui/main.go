@@ -17,9 +17,11 @@ func setupUI() {
 		log.Fatal(err)
 	}
 
-	win := NewWindow(c.Title, c.Width, c.Height, c.HashMenubar)
+	win := newWindow(c.Title, c.Width, c.Height, c.HashMenubar)
 
 	win.mainExit()
+
+	win.setMainBox()
 
 	win.mainShow()
 }

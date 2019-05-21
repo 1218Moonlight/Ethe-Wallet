@@ -5,11 +5,14 @@ import (
 )
 
 type window struct {
-	main *ui.Window
+	main     *ui.Window
+	mainBox mainBox
 }
 
-func NewWindow(title string, width, height int, hashMenubar bool) window {
-	return window{main: func() *ui.Window { return ui.NewWindow(title, width, height, hashMenubar) }()}
+func newWindow(title string, width, height int, hashMenubar bool) window {
+	return window{
+		main: func() *ui.Window { return ui.NewWindow(title, width, height, hashMenubar) }(),
+		mainBox: newMainBox()}
 }
 
 func (w window) mainExit() {
@@ -26,4 +29,8 @@ func (w window) mainExit() {
 
 func (w window) mainShow() {
 	w.main.Show()
+}
+
+func (w window) setMainBox() {
+	w.main.SetChild(w.mainBox.ui())
 }
