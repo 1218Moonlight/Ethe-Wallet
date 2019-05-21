@@ -1,26 +1,29 @@
 package gui
 
 import (
-	"config"
-	"log"
 	"github.com/andlabs/ui"
 )
 
-func setupUI() {
-	a, e := config.File("config.json")
-	if e !=nil {
-		log.Fatal(e)
-	}
+type window struct {
+	main *ui.Window
+}
 
-	mainwin := ui.NewWindow(a.Title, a.Width, a.Height, a.HashMenubar)
-	mainwin.OnClosing(func(*ui.Window) bool {
+func NewWindow(title string, width, height int, hashMenubar bool) window {
+	return window{main: func() *ui.Window { return ui.NewWindow(title, width, height, hashMenubar) }()}
+}
+
+func (w window) mainExit() {
+	w.main.OnClosing(func(*ui.Window) bool {
 		ui.Quit()
 		return true
 	})
+
 	ui.OnShouldQuit(func() bool {
-		mainwin.Destroy()
+		w.main.Destroy()
 		return true
 	})
+}
 
-	mainwin.Show()
+func (w window) mainShow() {
+	w.main.Show()
 }
