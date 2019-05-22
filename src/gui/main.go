@@ -21,7 +21,9 @@ func setupUI() {
 
 	win.mainExit()
 
-	win.accountTab()
+	win.walletUI()
+
+	win.apiUI()
 
 	win.mainShow()
 }

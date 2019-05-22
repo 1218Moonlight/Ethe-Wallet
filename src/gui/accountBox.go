@@ -2,6 +2,7 @@ package gui
 
 import (
 	"github.com/andlabs/ui"
+
 	"ethe"
 	"io/ioutil"
 	"fmt"
@@ -35,7 +36,7 @@ func newMainBox() eoa {
 	return box
 }
 
-func (m eoa) ui() *ui.Box {
+func (m eoa) show() *ui.Box {
 	m.setGenerateWallet()
 	m.hSeparator(textAccountList)
 	m.accountReloadBTN()
@@ -48,7 +49,7 @@ func (m eoa) hSeparator(label string) {
 	m.box.Append(ui.NewLabel(label), false)
 }
 
-func (m eoa) setGenerateWallet() *ui.Box {
+func (m eoa) setGenerateWallet() {
 	group := ui.NewGroup("EOA")
 	group.SetMargined(true)
 
@@ -65,27 +66,25 @@ func (m eoa) setGenerateWallet() *ui.Box {
 	group.SetChild(h)
 
 	m.box.Append(group, false)
-	return m.box
 }
 
-func (m eoa) accountReloadBTN() *ui.Box {
+func (m eoa) accountReloadBTN() {
 	reloadBtn = ui.NewButton(textReload)
 	reloadBtn.OnClicked(func(button *ui.Button) {
 		eoaListAppend()
 	})
 
 	m.box.Append(reloadBtn, false)
-	return m.box
 }
 
-func (m eoa) setAccountList() *ui.Box {
+func (m eoa) setAccountList() {
 	eoaList = ui.NewMultilineEntry()
 	eoaList.SetReadOnly(true)
 
 	eoaListAppend()
 
 	m.box.Append(eoaList, true)
-	return m.box
+
 }
 
 func setNewAccountBTN() *ui.Button {
