@@ -21,7 +21,7 @@ func setupUI() {
 
 	win.mainExit()
 
-	win.setMainBox()
+	win.accountTab()
 
 	win.mainShow()
 }
