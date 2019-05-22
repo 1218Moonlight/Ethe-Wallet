@@ -37,6 +37,7 @@ func newApiBox(url string) api {
 }
 
 func (a api) show() *ui.Box {
+	log.Println("Setting api tab.")
 	a.init()
 	a.selectWallet()
 	a.myInfo()

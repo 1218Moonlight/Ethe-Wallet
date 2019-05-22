@@ -8,10 +8,13 @@ import (
 )
 
 func Main() {
+	log.Println("Start the Ethe-Wallet.")
 	ui.Main(setupUI)
 }
 
 func setupUI() {
+
+	log.Println("Reading the setup file.")
 	c, err := config.NewConfig()
 	if err != nil {
 		log.Fatal(err)

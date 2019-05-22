@@ -6,6 +6,7 @@ import (
 	"ethe"
 	"io/ioutil"
 	"fmt"
+	"log"
 )
 
 const (
@@ -37,6 +38,7 @@ func newMainBox() eoa {
 }
 
 func (m eoa) show() *ui.Box {
+	log.Println("Setting Wallet Tab")
 	m.setGenerateWallet()
 	m.hSeparator(textAccountList)
 	m.accountReloadBTN()
