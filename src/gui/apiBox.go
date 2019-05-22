@@ -83,16 +83,19 @@ func requestGethAPI() {
 
 	key, err := ethe.ResultKeystore(apiIndexLine.Value(), apiPwdLine.Text())
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	client, err := newGethApi(apiUrlLine.Text(), key.Address())
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	balance, err := client.getBalance()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	apiMuliLine.Append(fmt.Sprintf("Account : 0x%0x\n", key.Address()))
