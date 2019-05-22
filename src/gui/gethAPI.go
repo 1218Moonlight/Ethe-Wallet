@@ -3,7 +3,6 @@ package gui
 import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/common"
-	"log"
 	"context"
 	"math/big"
 )
@@ -13,19 +12,24 @@ type gethApi struct {
 	eoa  common.Address
 }
 
-func newGethApi(url string, eoa common.Address) gethApi {
-	return gethApi{
-		dial: gethApiClient(url),
-		eoa:  eoa,
+func newGethApi(url string, eoa common.Address) (gethApi, error) {
+	client, err := gethApiClient(url)
+	if err != nil {
+		return gethApi{}, err
 	}
+
+	return gethApi{
+		dial: client,
+		eoa:  eoa,
+	}, nil
 }
 
-func gethApiClient(url string) (*ethclient.Client) {
+func gethApiClient(url string) (*ethclient.Client, error) {
 	cli, err := ethclient.Dial(url)
 	if err != nil {
-		log.Fatal(err)
+		return &ethclient.Client{}, err
 	}
-	return cli
+	return cli, nil
 }
 
 func (g gethApi) getBalance() (*big.Int, error) {

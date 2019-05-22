@@ -16,12 +16,12 @@ type window struct {
 	apiTab api
 }
 
-func newWindow(title string, width, height int, hashMenubar bool) window {
+func newWindow(title string, width, height int, hashMenubar bool, gethURL string) window {
 	return window{
 		main:   func() *ui.Window { return ui.NewWindow(title, width, height, hashMenubar) }(),
 		tab:    func() *ui.Tab { return ui.NewTab() }(),
 		eoaTab: newMainBox(),
-		apiTab: newApiBox()}
+		apiTab: newApiBox(gethURL)}
 }
 
 // Wallet Tab

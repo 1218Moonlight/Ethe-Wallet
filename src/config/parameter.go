@@ -13,6 +13,7 @@ type param struct {
 	Width       int    `json:"width"`
 	Height      int    `json:"height"`
 	HashMenubar bool   `json:"hasMenubar"`
+	Geth        string `json:"geth"`
 }
 
 func NewConfig() (param, error) {

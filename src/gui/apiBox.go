@@ -2,23 +2,33 @@ package gui
 
 import (
 	"github.com/andlabs/ui"
-	"io/ioutil"
-	"ethe"
 	"log"
+	"ethe"
+	"strings"
+	"fmt"
 )
 
 var (
 	apiIndexLine *ui.Spinbox
 	apiPwdLine   *ui.Entry
-	urlLine      *ui.Entry
+	apiUrlLine   *ui.Entry
+	apiMuliLine  *ui.MultilineEntry
 )
 
 type api struct {
-	box *ui.Box
+	gethURL string
+	box     *ui.Box
 }
 
-func newApiBox() api {
+func newApiBox(url string) api {
+	if url == "" {
+		log.Fatal("URL is Empty")
+	} else if !strings.HasPrefix(url, "http://") {
+		log.Fatal("ERROR Prefix! ex> 'http://url:port'")
+	}
+
 	return api{
+		gethURL: url,
 		box: func() *ui.Box {
 			v := ui.NewVerticalBox()
 			v.SetPadded(true)
@@ -29,13 +39,18 @@ func newApiBox() api {
 func (a api) show() *ui.Box {
 	a.init()
 	a.selectWallet()
+	a.myInfo()
 	return a.box
 }
 
 func (a api) init() {
-	urlLine = ui.NewEntry()
+	apiUrlLine = ui.NewEntry()
+	apiUrlLine.SetText(a.gethURL)
+	apiUrlLine.SetReadOnly(true)
 	apiIndexLine = ui.NewSpinbox(0, 100)
 	apiPwdLine = ui.NewPasswordEntry()
+	apiMuliLine = ui.NewMultilineEntry()
+	apiMuliLine.SetReadOnly(true)
 
 }
 
@@ -45,7 +60,7 @@ func (a api) selectWallet() {
 	g := ui.NewGroup("")
 
 	from := ui.NewForm()
-	from.Append("gethURL :  ", urlLine, false)
+	from.Append("gethURL :  ", apiUrlLine, false)
 	from.Append("index :  ", apiIndexLine, true)
 	from.Append("pwd :  ", apiPwdLine, true)
 	g.SetChild(from)
@@ -62,25 +77,27 @@ func (a api) selectWallet() {
 	a.box.Append(h, false)
 }
 
-func requestGethAPI(){
-	eoaListSearch(apiIndexLine.Value())
-	//newGethApi(urlLine.Text(), )
-}
+func requestGethAPI() {
+	apiMuliLine.SetText("")
 
-func eoaListSearch(index int) {
-	files, err := ioutil.ReadDir(ethe.WalletPath)
+	key, err := ethe.ResultKeystore(apiIndexLine.Value(), apiPwdLine.Text())
+	if err != nil {
+		log.Fatal(err)
+	}
+	client, err := newGethApi(apiUrlLine.Text(), key.Address())
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if (index + 1) != len(files) {
-		log.Println("index out of range")
-		return
+	balance, err := client.getBalance()
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	for i, file := range files {
-		if i == index{
-			log.Println(file.Name())
-		}
-	}
+	apiMuliLine.Append(fmt.Sprintf("Account : 0x%0x\n", key.Address()))
+	apiMuliLine.Append(fmt.Sprintf("Balance : %s\n", balance))
+}
+
+func (a api) myInfo() {
+	a.box.Append(apiMuliLine, true)
 }
