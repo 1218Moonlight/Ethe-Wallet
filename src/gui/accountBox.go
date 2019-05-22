@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	textNewAccount  = "NewAccount"
+	textNewAccount  = "newAccount"
 	textAccountList = "Account List"
 	textReload      = "reload"
 )
@@ -36,8 +36,7 @@ func newMainBox() eoa {
 }
 
 func (m eoa) ui() *ui.Box {
-	m.setPwdText()
-	m.setNewAccountBTN()
+	m.setGenerateWallet()
 	m.hSeparator(textAccountList)
 	m.accountReloadBTN()
 	m.setAccountList()
@@ -49,20 +48,23 @@ func (m eoa) hSeparator(label string) {
 	m.box.Append(ui.NewLabel(label), false)
 }
 
-func (m eoa) setPwdText() *ui.Box {
+func (m eoa) setGenerateWallet() *ui.Box {
+	group := ui.NewGroup("EOA")
+	group.SetMargined(true)
+
+	h := ui.NewHorizontalBox()
+
+	from := ui.NewForm()
+
 	pwdEntry = ui.NewEntry()
+	from.Append("PWD :  ", pwdEntry, true)
 
-	m.box.Append(pwdEntry, false)
-	return m.box
-}
+	h.Append(from, true)
+	h.Append(setNewAccountBTN(), false)
 
-func (m eoa) setNewAccountBTN() *ui.Box {
-	newEoaBtn = ui.NewButton(textNewAccount)
-	newEoaBtn.OnClicked(func(button *ui.Button) {
-		ethe.NewAccount(pwdEntry.Text())
-	})
+	group.SetChild(h)
 
-	m.box.Append(newEoaBtn, false)
+	m.box.Append(group, false)
 	return m.box
 }
 
@@ -84,6 +86,14 @@ func (m eoa) setAccountList() *ui.Box {
 
 	m.box.Append(eoaList, true)
 	return m.box
+}
+
+func setNewAccountBTN() *ui.Button {
+	newEoaBtn = ui.NewButton(textNewAccount)
+	newEoaBtn.OnClicked(func(button *ui.Button) {
+		ethe.NewAccount(pwdEntry.Text())
+	})
+	return newEoaBtn
 }
 
 func eoaListAppend() {
