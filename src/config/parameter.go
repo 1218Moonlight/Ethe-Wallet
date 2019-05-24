@@ -4,16 +4,18 @@ import (
 	"os"
 	"io/ioutil"
 	"encoding/json"
+	"math/big"
 )
 
 const jsonPath string = "config.json"
 
 type param struct {
-	Title       string `json:"title"`
-	Width       int    `json:"width"`
-	Height      int    `json:"height"`
-	HashMenubar bool   `json:"hasMenubar"`
-	Geth        string `json:"geth"`
+	Title       string  `json:"title"`
+	Width       int     `json:"width"`
+	Height      int     `json:"height"`
+	HashMenubar bool    `json:"hasMenubar"`
+	Geth        string  `json:"geth"`
+	ChainID     *big.Int `json:"chainID"`
 }
 
 func NewConfig() (param, error) {

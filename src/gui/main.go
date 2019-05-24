@@ -20,13 +20,15 @@ func setupUI() {
 		log.Fatal(err)
 	}
 
-	win := newWindow(c.Title, c.Width, c.Height, c.HashMenubar, c.Geth)
+	win := newWindow(c.Title, c.Width, c.Height, c.HashMenubar, c.Geth, c.ChainID)
 
 	win.mainExit()
 
 	win.walletUI()
 
 	win.apiUI()
+
+	win.txUI()
 
 	win.mainShow()
 }

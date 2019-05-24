@@ -10,7 +10,6 @@ import (
 
 var (
 	apiIndexLine *ui.Spinbox
-	apiPwdLine   *ui.Entry
 	apiUrlLine   *ui.Entry
 	apiMuliLine  *ui.MultilineEntry
 )
@@ -49,7 +48,6 @@ func (a api) init() {
 	apiUrlLine.SetText(a.gethURL)
 	apiUrlLine.SetReadOnly(true)
 	apiIndexLine = ui.NewSpinbox(0, 100)
-	apiPwdLine = ui.NewPasswordEntry()
 	apiMuliLine = ui.NewMultilineEntry()
 	apiMuliLine.SetReadOnly(true)
 
@@ -63,7 +61,6 @@ func (a api) selectWallet() {
 	from := ui.NewForm()
 	from.Append("gethURL :  ", apiUrlLine, false)
 	from.Append("index :  ", apiIndexLine, true)
-	from.Append("pwd :  ", apiPwdLine, true)
 	g.SetChild(from)
 
 	h.Append(g, true)
@@ -81,11 +78,12 @@ func (a api) selectWallet() {
 func requestGethAPI() {
 	apiMuliLine.SetText("")
 
-	key, err := ethe.ResultKeystore(apiIndexLine.Value(), apiPwdLine.Text())
+	key, err := ethe.ResultKeystore(apiIndexLine.Value(), "")
 	if err != nil {
 		log.Println(err)
 		return
 	}
+
 	client, err := newGethApi(apiUrlLine.Text(), key.Address())
 	if err != nil {
 		log.Println(err)

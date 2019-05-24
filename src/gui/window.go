@@ -2,11 +2,13 @@ package gui
 
 import (
 	"github.com/andlabs/ui"
+	"math/big"
 )
 
 const (
 	textAccountTab = "Wallet"
-	textApiTab = "API"
+	textApiTab     = "API"
+	textTxTab      = "TX"
 )
 
 type window struct {
@@ -14,14 +16,16 @@ type window struct {
 	tab    *ui.Tab
 	eoaTab eoa
 	apiTab api
+	txTab  transaction
 }
 
-func newWindow(title string, width, height int, hashMenubar bool, gethURL string) window {
+func newWindow(title string, width, height int, hashMenubar bool, gethURL string, chainID *big.Int) window {
 	return window{
 		main:   func() *ui.Window { return ui.NewWindow(title, width, height, hashMenubar) }(),
 		tab:    func() *ui.Tab { return ui.NewTab() }(),
 		eoaTab: newMainBox(),
-		apiTab: newApiBox(gethURL)}
+		apiTab: newApiBox(gethURL),
+		txTab:  newTxBox(gethURL, chainID)}
 }
 
 // Wallet Tab
@@ -32,6 +36,10 @@ func (w window) walletUI() {
 
 func (w window) apiUI() {
 	w.tab.Append(textApiTab, w.apiTab.show())
+}
+
+func (w window) txUI() {
+	w.tab.Append(textTxTab, w.txTab.show())
 }
 
 func (w window) mainExit() {

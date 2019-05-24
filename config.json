@@ -3,5 +3,6 @@
   "width": 650,
   "height": 400,
   "hasMenubar": false,
-  "geth": "http://192.168.0.133:8545"
+  "geth": "http://192.168.0.133:8545",
+  "chainID": 444444
 }
