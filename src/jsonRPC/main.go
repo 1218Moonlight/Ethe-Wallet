@@ -10,6 +10,8 @@ import (
 	"encoding/hex"
 	"github.com/ethereum/go-ethereum/crypto"
 	"strconv"
+	"strings"
+	"log"
 )
 
 type Client struct {
@@ -18,6 +20,12 @@ type Client struct {
 }
 
 func NewClient(url string, chainID *big.Int) Client {
+	if url == "" {
+		log.Fatal("URL is Empty")
+	} else if !strings.HasPrefix(url, "http://") {
+		log.Fatal("ERROR Prefix! ex> 'http://url:port'")
+	}
+
 	return Client{
 		dial:    ethrpc.New(url),
 		chainID: chainID,
